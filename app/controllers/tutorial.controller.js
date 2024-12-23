@@ -56,7 +56,6 @@ exports.findAll2 = async (req, res) => {
 
   if (title) {
     query += " WHERE title LIKE :title";
-    replacements.push({ title: `%${title}%` });
   }
 
   try {
