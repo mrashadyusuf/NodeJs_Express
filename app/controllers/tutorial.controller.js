@@ -49,6 +49,30 @@ exports.findAll = (req, res) => {
     });
 };
 
+exports.findAll2 = async (req, res) => {
+  const title = req.query.title;
+  let query = "SELECT * FROM tutorials";
+  const replacements = [];
+
+  if (title) {
+    query += " WHERE title LIKE :title";
+    replacements.push({ title: `%${title}%` });
+  }
+
+  try {
+    // Use the sequelize connection for raw queries
+    const [results, metadata] = await db.sequelize.query(query,{
+      replacements: { title: `%${title}%` }, // Named parameters for safety
+    });
+
+    res.send(results);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving tutorials.",
+    });
+  }
+};
+
 // Find a single Tutorial with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
